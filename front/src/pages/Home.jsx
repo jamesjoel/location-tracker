@@ -29,10 +29,6 @@ const Home = () => {
       setError(err.message);
     }
     navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
-
-    // Optional: you can watch the position for continuous updates
-    // const watchId = navigator.geolocation.watchPosition(successHandler, errorHandler);
-    // return () => navigator.geolocation.clearWatch(watchId); // Cleanup watch position on component unmount
     },[])
 
     if (error) {
@@ -45,7 +41,7 @@ const Home = () => {
 
   let generateUrl = ()=>{
     axios
-    .post("http://192.168.0.107:3000/api/v1/", {name : name, ...location})
+    .post("https://location-tracker-j5j5.onrender.com/api/v1/", {name : name, ...location})
     .then(response=>{
       navigate("/finder/"+response.data.result._id);
       // console.log(response.data)
