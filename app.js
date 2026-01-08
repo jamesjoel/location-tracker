@@ -3,6 +3,7 @@ import cors from 'cors'
 import mongoose from 'mongoose';
 import requestIp from 'request-ip'
 import srs from 'secure-random-string'
+import path from 'path'
 const DB_URL = "mongodb+srv://jamessteppingstone:wPlVhhEuxtSm1xHM@cluster0.pp2xrpj.mongodb.net/";
 
 mongoose
@@ -27,6 +28,10 @@ app.use(cors())
 app.use(express.json());
 app.use(requestIp.mw());
 app.use(express.urlencoded({extended : true}));
+
+const root = path.join(path.resolve()+"/dist")
+app.use(express.static(root));
+
 
 app.post("/api/v1/",async(req, res)=>{
     let randStr = srs({length : 100})
@@ -64,5 +69,11 @@ app.put("/api/v1/:u", async(req, res)=>{
 })
 
 
+app.get("/{*splat}", (req, res)=>{
+    res.sendFile("index.html", {root});
+    
+})
 
-app.listen(3000, "0.0.0.0", ()=>console.log("Server Running"))
+let port = process.env.PORT || 3000;
+
+app.listen(port, "0.0.0.0", ()=>console.log("Server Running"))
