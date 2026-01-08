@@ -60,7 +60,7 @@ const Tracker = () => {
 
   let UploadIntoServer = ()=>{
     axios
-    .put("https://location-tracker-j5j5.onrender.com/api/v1/"+param.unique, {latitude :  22.753284, longitude : 75.893700})
+    .put("https://location-tracker-j5j5.onrender.com/api/v1/"+param.unique, location)
     .then(response=>{
       // console.log(response.data);
       setSource({ lat : response.data.result.receiver_lat, lng : response.data.result.receiver_long});
