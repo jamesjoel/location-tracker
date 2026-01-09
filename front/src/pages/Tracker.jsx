@@ -5,12 +5,11 @@ import Directions from '../components/Directions';
 import {
   APIProvider,
   Map,
-  
-  
   AdvancedMarker,
   Pin
 } from "@vis.gl/react-google-maps";
 import Header from '../components/Header';
+import { API_URL } from '../config/API_URL';
 const containerStyle = {
   width: "100%",
   height: "500px",
@@ -25,6 +24,7 @@ const Tracker = () => {
   let [error, setError] = useState(null)
 
   let GetGeoLocation = ()=>{
+    
     if (!navigator.geolocation) {
       setError('Geolocation is not supported by your browser');
       return;
@@ -39,28 +39,24 @@ const Tracker = () => {
       setError(err.message);
     }
     navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
+    setTimeout(()=>{
+      GetGeoLocation()
+    },10000);
   }
-
-
   useEffect(() => {
-    
-    FinalFun();
-    
+    GetGeoLocation();
   }, [])
+  useEffect(()=>{
+    UploadIntoServer();
 
-  let FinalFun = ()=>{
-      GetGeoLocation();
-      UploadIntoServer();
-      setTimeout(() => {
-        // console.log("#############")
-        FinalFun();
-      }, 10000);
-  }
+  },[location])
+
+  
 
 
   let UploadIntoServer = ()=>{
     axios
-    .put("https://location-tracker-j5j5.onrender.com/api/v1/"+param.unique, location)
+    .put(`${API_URL}/${param.unique}`, location)
     .then(response=>{
       // console.log(response.data);
       setSource({ lat : response.data.result.receiver_lat, lng : response.data.result.receiver_long});
@@ -85,13 +81,17 @@ const Tracker = () => {
   return (
     <>
     <Header />
-
+    {location.latitude}
+    {location.longitude}
     <div className="container my-5">
       <div className="row">
         <div className="col-md-12">
             <h4>You : <span style={{display : "inline-block", height : "30px", width : "30px", backgroundColor : "#d204fbff"}}></span></h4>
     <h4>Friend : <span style={{display : "inline-block", height : "30px", width : "30px", backgroundColor : "#0463fbff"}}></span></h4>
-    <APIProvider apiKey="AIzaSyD-vpcc3LQ4s5b7yrEvIG7u0jMHlQL8pzU">
+      {
+        source
+        ?
+        <APIProvider apiKey="AIzaSyD-vpcc3LQ4s5b7yrEvIG7u0jMHlQL8pzU">
           <Map
             defaultZoom={14}
             defaultCenter={source}
@@ -109,6 +109,9 @@ const Tracker = () => {
             <Directions source={source} destination={destination} />
           </Map>
         </APIProvider>
+        :
+        ''
+      }
         </div>
       </div>
 

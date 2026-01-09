@@ -69,6 +69,7 @@ app.get("/api/v1/:id", async(req, res)=>{
 
 
 app.put("/api/v1/:u", async(req, res)=>{
+    console.log(req.body);
     let result1 =await Tracker.updateMany({unique_str : req.params.u}, {receiver_lat : req.body.latitude, receiver_long : req.body.longitude})
     let result2 = await Tracker.find({unique_str : req.params.u});
     res.send({success:true, result : result2[0]});

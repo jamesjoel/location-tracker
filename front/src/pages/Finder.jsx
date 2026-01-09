@@ -11,6 +11,7 @@ import {
   AdvancedMarker,
   Pin
 } from "@vis.gl/react-google-maps";
+import { API_URL, URL } from '../config/API_URL'
 
 const containerStyle = {
   width: "100%",
@@ -34,10 +35,11 @@ const Finder = () => {
 
   useEffect(()=>{
     axios
-    .get("https://location-tracker-j5j5.onrender.com/api/v1/"+param.id)
+    .get(`${API_URL}/${param.id}`)
     .then(response=>{
-      let x = "https://location-tracker-j5j5.onrender.com/tracker/"+response.data.result.unique_str;
+      let x = `${URL}/tracker/${response.data.result.unique_str}`;
       setUnique(response.data.result.unique_str)
+      
       setUrl(x);
       setPosition({ lat : response.data.result.sender_lat, lng : response.data.result.sender_long })
     })
