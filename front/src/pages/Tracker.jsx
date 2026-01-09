@@ -58,9 +58,9 @@ const Tracker = () => {
     axios
     .put(`${API_URL}/${param.unique}`, location)
     .then(response=>{
-      // console.log(response.data);
-      setSource({ lat : response.data.result.receiver_lat, lng : response.data.result.receiver_long});
-      setDestination({ lat : response.data.result.sender_lat, lng : response.data.result.sender_long});
+      console.log(response.data);
+      setSource({ lat : parseFloat(response.data.result.receiver_lat), lng : parseFloat(response.data.result.receiver_long)});
+      setDestination({ lat : parseFloat(response.data.result.sender_lat), lng : parseFloat(response.data.result.sender_long)});
       // setDestination({ lat :, lng : });
 
     })
@@ -81,16 +81,17 @@ const Tracker = () => {
   return (
     <>
     <Header />
-    {location.latitude}
-    {location.longitude}
+    
     <div className="container my-5">
       <div className="row">
         <div className="col-md-12">
             <h4>You : <span style={{display : "inline-block", height : "30px", width : "30px", backgroundColor : "#d204fbff"}}></span></h4>
     <h4>Friend : <span style={{display : "inline-block", height : "30px", width : "30px", backgroundColor : "#0463fbff"}}></span></h4>
       {
-        source
+        source.lat
         ?
+        <>
+        <h1>hello</h1>
         <APIProvider apiKey="AIzaSyD-vpcc3LQ4s5b7yrEvIG7u0jMHlQL8pzU">
           <Map
             defaultZoom={14}
@@ -109,8 +110,9 @@ const Tracker = () => {
             <Directions source={source} destination={destination} />
           </Map>
         </APIProvider>
+        </>
         :
-        ''
+        'no'
       }
         </div>
       </div>

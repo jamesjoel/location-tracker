@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {useMap} from '@vis.gl/react-google-maps'
 
 const Directions = ({ source, destination }) => {
+  console.log("************",source, destination)
   const map = useMap();
   const [directionsRenderer, setDirectionsRenderer] = useState(null);
 
